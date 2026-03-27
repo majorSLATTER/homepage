@@ -9,12 +9,17 @@ import json
 import shutil
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def url_for(endpoint, **values):
-    """Custom url_for function for static files."""
-    if endpoint == 'static':
-        filename = values.get('filename', '')
-        return f'/static/{filename}'
-    return '/'
+def create_url_for(current_path):
+    """Create a url_for function for the current path."""
+    def url_for(endpoint, **values):
+        if endpoint == 'static':
+            filename = values.get('filename', '')
+            if current_path == '/':
+                return f'static/{filename}'
+            else:
+                return f'../static/{filename}'
+        return './' if current_path == '/' else '../'
+    return url_for
 
 def build_site():
     """Build the static site."""
@@ -27,17 +32,17 @@ def build_site():
 
     # Clean build directory
     if os.path.exists(build_dir):
-        shutil.rmtree(build_dir)
-    os.makedirs(build_dir)
+        try:
+            shutil.rmtree(build_dir)
+        except:
+            pass  # Directory might be in use
+    os.makedirs(build_dir, exist_ok=True)
 
     # Setup Jinja2 environment
     env = Environment(
         loader=FileSystemLoader(templates_dir),
         autoescape=select_autoescape(['html', 'xml'])
     )
-
-    # Add custom url_for function
-    env.globals['url_for'] = url_for
 
     # Load projects data
     projects_path = os.path.join(static_dir, 'projects.json')
@@ -54,6 +59,9 @@ def build_site():
 
     # Render templates
     for template_name, url_path, context in routes:
+        # Add custom url_for function for this path
+        context['url_for'] = create_url_for(url_path)
+        
         template = env.get_template(template_name)
         html_content = template.render(**context)
 
