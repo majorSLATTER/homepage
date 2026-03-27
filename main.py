@@ -1,18 +1,8 @@
 from flask import Flask, render_template
 import json
 import os
-from flask_frozen import Freezer
 
 app = Flask(__name__)
-freezer = Freezer(app)
-
-# Configure freezer to create .html files for routes
-@freezer.register_generator
-def url_generator():
-    yield '/'
-    yield '/projects/'
-    yield '/about/'
-    yield '/contact/'
 
 @app.route('/')
 def hello_world():
