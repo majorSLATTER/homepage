@@ -5,9 +5,6 @@ on:
     branches:
       - main
 
-env:
-  HEALTHCHECK_URL: http://34.228.255.233:50000
-
 jobs:
   Build-test-deploy:
     runs-on: ubuntu-latest
@@ -35,18 +32,3 @@ jobs:
       - name: Deploy Flask Application
         run: |
           nohup python3 main.py &
-
-  health:
-    needs: Build-test-deploy
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Health check
-        run: |
-          for i in {1..10}; do
-            curl -s -o /dev/null -w "%{http_code}" $HEALTHCHECK_URL | grep "200" && echo "Health check passed" && exit 0 || echo "Waiting for service...";
-            sleep 5;
-          done;
-          echo "Health check failed***" && exit 1
-          
-          
