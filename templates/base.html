@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sune Skovmand</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="icon" href="../static/img/logo.png" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <a href="/"><img src="../static/img/logo.png" alt="Sune Skovmand neon logo: stylized purple and black design featuring two mirrored figures with curved forms and glowing neon outline effect" id="logo"></a>
+        <nav>
+            <ul>
+                <li><a href="/projects">Projekter</a></li>
+                <li><a href="/about">Om Mig</a></li>
+                <li><a href="/contact">Kontakt</a></li>
+            </ul>
+            <label for="darkmode-slider" class="switch">
+                <input type="checkbox" name="darkmode" id="darkmode-slider">
+                <span class="slider"></span>
+                <script>
+                    const darkmodeSlider = document.getElementById('darkmode-slider');
+                    darkmodeSlider.addEventListener('change', function() {
+                        document.body.classList.toggle('dark-mode', this.checked);
+                    });
+                </script>
+            </label>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>Mail: sune.skovmand@gmail.com</p>
+        <p>Telefon: +45 25 61 68 85</p>
+        <p>Adresse: Klingenberg 15C, 3. th, 5000 Odense C, Danmark</p>
+    </footer>
+</body>
+</html>

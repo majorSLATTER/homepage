@@ -1,0 +1,12 @@
+[
+    {
+        "title": "Denne hjemmeside",
+        "description": "Hjemmesiden er udviklet som en simpel webapplikation med Flask, et letvægts Python-framework til webudvikling. Applikationen er bygget med Python til server-logik, HTML og Jinja2 til templates, CSS til styling samt JSON til håndtering af projektdata.",
+        "image": "../static/img/logo.png"
+    },
+    {
+        "title": "SOIS",
+        "description": "Dette er en beskrivelse af SOIS, som er et projekt i Flask og Python.",
+        "image": "../static/img/logo2.png"
+    }
+]
