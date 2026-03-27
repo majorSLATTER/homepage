@@ -30,6 +30,8 @@ jobs:
           pip install -r requirements.txt
       - name: Freeze Flask app
         run: python freeze.py
+      - name: Copy CNAME
+        run: cp CNAME build/
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
