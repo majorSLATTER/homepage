@@ -1,25 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About - Sune Skovmand</title>
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-    <header>
-        <a href="/"><img src="/static/img/logo.png" alt="Logo" id="logo"></a>
-        <nav>
-            <ul>
-                <li><a href="/projects">Projekter</a></li>
-                <li><a href="/about">Om Mig</a></li>
-                <li><a href="/contact">Kontakt</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h1>About Me</h1>
-        <p>This is the about page.</p>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<section class="about">
+    <h1>Om Mig</h1>
+    <ul class="about-points">
+        <li class="about-card">
+            <div class="about-content">
+                <h3>IT-arkitekt fra IBA</h3>
+                <p>Med erfaring inden for systemarkitektur og teknologisk design, arbejder jeg med at skabe skalerbare og effektive løsninger.</p>
+            </div>
+        </li>
+        <li class="about-card">
+            <div class="about-content">
+                <h3>HK's fanebærer</h3>
+                <p>Dedikeret til at promovere og støtte HK's værdier og mål gennem aktivt engagement og lederskab.</p>
+            </div>
+        </li>
+        <li class="about-card">
+            <div class="about-content">
+                <h3>Præsident</h3>
+                <p>Som præsident fokuserer jeg på at skabe positive forandringer og være en inspirationskilde for mit samfund.</p>
+            </div>
+        </li>
+        <li class="about-card">
+            <div class="about-content">
+                <h3>Interesser</h3>
+                <p>Jeg er passioneret omkring teknologi, kunstig intelligens, og hvordan vi kan bruge innovation til at løse reelle problemer.</p>
+            </div>
+        </li>
+        <li class="about-card">
+            <div class="about-content">
+                <h3>Som person...</h3>
+                <p>Jeg er en nysgerrig, ambitiøs individ der værdsætter samarbejde, læring og personlig udvikling i alt, hvad jeg gør.</p>
+            </div>
+        </li>
+    </ul>
+</section>
+{% endblock %}
