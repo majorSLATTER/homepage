@@ -224,6 +224,7 @@ h2 {
     border-radius: 0px 10px 10px 0px;
     width: 80%;
     padding: 20px;
+    margin-bottom: 15px;
     text-align: center;
     display: grid;
     align-self: flex-start;
@@ -231,23 +232,26 @@ h2 {
         "image header"
         "image desc";
     grid-template-columns: 2fr 3fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr 2fr;
     transition: left 0.5s ease;
 }
 
 .project-card h2 {
     grid-area: header;
+    font-size: 30px;
 }
 
 .project-card p {
     grid-area: desc;
+    font-size: 20px;
 }
 
 .project-card img {
     height: auto;
+    width: 100%;
+    object-fit: cover;
     border-radius: 10px;
     grid-area: image;
-    width: 40%;
     align-self: center;
     justify-self: center;
 }
