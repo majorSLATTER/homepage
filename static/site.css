@@ -8,8 +8,6 @@ body {
     display: grid;
     grid-template-rows: 1fr 6fr 1fr;
     font-family:monospace;
-    -webkit-transition: .4s;
-    transition: .4s;
 }
 header {
     padding: 0px 30px;
@@ -35,7 +33,7 @@ nav {
 .nav-separator {
     width: 2px;
     height: 30px;
-    background-color: #ff0000;
+    background-color: rgb(176, 0, 216);
     opacity: 0.5;
 }
 
@@ -128,8 +126,6 @@ input:checked + .slider:before {
 .dark-mode {
     background-color: #414141;
     color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
 }
 
 

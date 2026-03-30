@@ -6,6 +6,15 @@
     <title>Sune Skovmand</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}">
     <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" type="image/x-icon">
+    <script defer>
+        window.addEventListener('load', function() {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkmode-slider').checked = true;
+            }
+        });
+    </script>
 </head>
 <body>
     <header>
@@ -18,11 +27,13 @@
             </ul>
             <div class="nav-separator"></div>
             <label for="darkmode-slider" class="switch">
+                <input type="checkbox" name="darkmode" id="darkmode-slider">
                 <span class="slider"></span>
                 <script>
                     const darkmodeSlider = document.getElementById('darkmode-slider');
                     darkmodeSlider.addEventListener('change', function() {
                         document.body.classList.toggle('dark-mode', this.checked);
+                        localStorage.setItem('darkMode', this.checked ? 'enabled' : 'disabled');
                     });
                 </script>
             </label>
