@@ -17,9 +17,19 @@ def create_url_for(current_path):
             if current_path == '/':
                 return f'static/{filename}'
             else:
-                return f'../static/{filename}'
+                # Count the depth of the current path to determine how many ../ we need
+                depth = current_path.count('/') - 1  # -1 because path ends with /
+                return '/'.join(['..'] * depth) + f'/static/{filename}'
         return './' if current_path == '/' else '../'
     return url_for
+
+def get_root_path(current_path):
+    """Get the relative path to the root from the current path."""
+    if current_path == '/':
+        return './'
+    else:
+        depth = current_path.count('/') - 1  # -1 because path ends with /
+        return '/'.join(['..'] * depth) + '/'
 
 def build_site():
     """Build the static site."""
@@ -59,8 +69,9 @@ def build_site():
 
     # Render templates
     for template_name, url_path, context in routes:
-        # Add custom url_for function for this path
+        # Add custom url_for function and root_path for this path
         context['url_for'] = create_url_for(url_path)
+        context['root_path'] = get_root_path(url_path)
         
         template = env.get_template(template_name)
         html_content = template.render(**context)
