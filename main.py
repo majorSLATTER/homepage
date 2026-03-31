@@ -12,7 +12,7 @@ def hello_world():
 def projects():
     # Load projects from JSON file
     projects_path = os.path.join(app.root_path, 'static', 'projects.json')
-    with open(projects_path, 'r') as f:
+    with open(projects_path, 'r', encoding='utf-8') as f:
         projects_data = json.load(f)
     return render_template('projects.html', projects=projects_data)
 

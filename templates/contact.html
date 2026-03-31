@@ -2,38 +2,24 @@
 
 {% block content %}
 <section class="contact">
-    <div class="container">
-        <h1>Kontakt</h1>
-        <p class="contact-intro">Jeg ser gerne høre fra dig! Brug formularen nedenfor, eller send mig en e-mail direkte.</p>
+    <h1>Kontakt</h1>
+    <p class="contact-intro">Jeg ser gerne høre fra dig. Her er de bedste måder at nå mig på:</p>
+    
+    <ul class="contact-methods">
+        <li class="contact-card">
+            <h3>E-mail</h3>
+            <p><a href="mailto:sune.skovmand@gmail.com">sune.skovmand@gmail.com</a></p>
+        </li>
         
-        <form class="contact-form" method="POST" action="/contact">
-            <div class="form-group">
-                <label for="name">Navn *</label>
-                <input type="text" id="name" name="name" required placeholder="Dit navn">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">E-mail *</label>
-                <input type="email" id="email" name="email" required placeholder="din.email@eksempel.dk">
-            </div>
-            
-            <div class="form-group">
-                <label for="subject">Emne *</label>
-                <input type="text" id="subject" name="subject" required placeholder="Hvad handler det om?">
-            </div>
-            
-            <div class="form-group">
-                <label for="message">Besked *</label>
-                <textarea id="message" name="message" required rows="6" placeholder="Din besked her..."></textarea>
-            </div>
-            
-            <button type="submit" class="submit-btn">Send Besked</button>
-        </form>
+        <li class="contact-card">
+            <h3>Telefon</h3>
+            <p><a href="tel:+4525616885">+45 25 61 68 85</a></p>
+        </li>
         
-        <div class="contact-direct">
-            <h3>Eller kontakt mig direkte</h3>
-            <p>E-mail: <a href="mailto:sune.skovmand@gmail.com">sune.skovmand@gmail.com</a></p>
-        </div>
-    </div>
+        <li class="contact-card">
+            <h3>Adresse</h3>
+            <p>Klingenberg 15C, 3. th<br>5000 Odense C<br>Danmark</p>
+        </li>
+    </ul>
 </section>
 {% endblock %}

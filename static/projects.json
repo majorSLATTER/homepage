@@ -1,42 +1,42 @@
 [
-{
-  "title": "Personal Portfolio with CI/CD and Static Deployment",
-  "description": "Udvikling af personlig portfolio hjemmeside bygget fra bunden med Flask og deployet som statisk site via GitHub Pages. Projektet inkluderer opsaetning af CI/CD pipeline, automatiseret deployment og fokus pa performance, struktur og moderne webarkitektur. Losningen fungerer som en skalerbar platform til praesentation af projekter og tekniske kompetencer.",
-  "image": "../static/img/logo.png"
-},
-{
-  "title": "SOIS-Driven Engineering Tool for Embedded USB Interfaces",
-  "description": "Udvikling af et C# baseret engineering tool hos Danish Aerospace Company, der automatiserer udvikling, test og dokumentation af USB baserede hardwareinterfaces. Ved at fortolke SOIS Electronic Data Sheets XML til strongly typed modeller blev UI, validering og kommunikationsstruktur genereret dynamisk. Losningen reducerede manuel opsaetning, forbedrede konsistens og skabte et skalerbart fundament for fremtidig automatisering.",
-  "image": "../static/img/sois.png"
-}, 
-{
-  "title": "Cloud-Based Telemetry System Modernization",
-  "description": "Modernisering af et aeldre Windows baseret telemetrisystem til en cloud baseret applikation under praktikophold hos Danish Aerospace Company. Projektet omfattede udvikling af API i C# og .NET, integration med NoSQL database samt frontend med drag and drop datavisualisering. Losningen forbedrede skalerbarhed, tilgaengelighed og fleksibilitet i handtering af telemetridata.",
-  "image": "../static/img/telemetry.png"
-},
-{
-  "title": "Political Choice Simplification Campaign Website",
-  "description": "Udvikling af en kampagne hjemmeside baseret pa data fra Danmarks Statistik og Indenrigsministeriet, der adresserer kompleksiteten i det danske partisystem. Projektet fokuserede pa at visualisere politiske positioner og forenkle vaelgernes beslutningsproces gennem datadrevet formidling, UX design og visuelle virkemidler. Resultatet blev en konceptuel platform, der hjaelper brugere med at navigere politiske valg mere intuitivt.",
-  "image": "../static/img/campaign.png"
-},
-{
-  "title": "Standardized PIM Module Prototype",
-  "description": "Design og udvikling af et standardiseret Product Information Management PIM modul med fokus pa databasearkitektur, backend struktur og bruger graenseflade. Projektet omfattede visualisering gennem mockups samt udvikling af en funktionel prototype, der demonstrerer hvordan et generisk PIM system kan anvendes pa tvaers af virksomheder med minimal tilpasning.",
-  "image": "../static/img/pim.png"
-},
-{
-  "title": "Microservices-Based Booking System for Kolding Trailers",
-  "description": "Udvikling af et containeriseret bookingsystem baseret pa microservices til Kolding Trailers A/S. Projektet omfattede kravspecificering med MoSCoW, FURPS og CAP, design af personaer og UML diagrammer samt implementering af API baseret bookingfunktionalitet med ekstern nummerpladeverifikation. Losningen blev distribueret med Docker og demonstrerede en skalerbar og moderne arkitektur til online reservationer.",
-  "image": "../static/img/microservices-booking.png"
-},
-{
-  "title": "Agile Enhancement of Note-Sharing Web Service",
-  "description": "Videreudvikling og forbedring af en eksisterende note delings webapplikation med fokus pa systemdokumentation, nye funktioner og agil udviklingsproces. Projektet omfattede teknisk dokumentation, brugerundersogelser, test og iterative forbedringer gennem Scrum. Resultatet blev en mere brugervenlig og veldokumenteret losning med forbedret funktionalitet og udviklingsproces.",
-  "image": "../static/img/agile-note.png"
-},
-{
-  "title": "Software Architecture Patterns and Maintainability Analysis",
-  "description": "Litteraturbaseret analyse af hvordan Microservices, CQRS og Hexagonal Arkitektur pavirker software vedligeholdelse, readability og clean code. Projektet sammenlignede styrker og svagheder ved de tre arkitekturmonstre og identificerede deres indflydelse pa kompleksitet, fleksibilitet og testbarhed. Resultatet viser, at arkitekturvalg bor baseres pa systemets kontekst og krav frem for en universel losning.",
-  "image": "../static/img/software-architecture.png"
-}
+  {
+    "title": "Personal Portfolio with CI/CD and Static Deployment",
+    "description": "Udvikling af personlig portfolio-hjemmeside bygget fra bunden med Flask og deployet som statisk site via GitHub Pages. Projektet inkluderer opsætning af CI/CD-pipeline, automatiseret deployment samt fokus på performance, struktur og moderne webarkitektur. Løsningen fungerer som en skalerbar platform til præsentation af projekter og tekniske kompetencer.",
+    "image": "../static/img/logo.png"
+  },
+  {
+    "title": "SOIS-Driven Engineering Tool for Embedded USB Interfaces",
+    "description": "Udvikling af et C#-baseret engineering tool hos Danish Aerospace Company, der automatiserer udvikling, test og dokumentation af USB-baserede hardwareinterfaces. Ved at fortolke SOIS Electronic Data Sheets XML til strongly typed modeller blev UI, validering og kommunikationsstruktur genereret dynamisk. Løsningen reducerede manuel opsætning, forbedrede konsistens og skabte et skalerbart fundament for fremtidig automatisering.",
+    "image": "../static/img/sois.png"
+  },
+  {
+    "title": "Cloud-Based Telemetry System Modernization",
+    "description": "Modernisering af et ældre Windows-baseret telemetrisystem til en cloud-baseret applikation under praktikophold hos Danish Aerospace Company. Projektet omfattede udvikling af API i C# og .NET, integration med NoSQL-database samt frontend med drag-and-drop datavisualisering. Løsningen forbedrede skalerbarhed, tilgængelighed og fleksibilitet i håndtering af telemetridata.",
+    "image": "../static/img/telemetry.png"
+  },
+  {
+    "title": "Political Choice Simplification Campaign Website",
+    "description": "Udvikling af en kampagne-hjemmeside baseret på data fra Danmarks Statistik og Indenrigsministeriet, der adresserer kompleksiteten i det danske partisystem. Projektet fokuserede på at visualisere politiske positioner og forenkle vælgernes beslutningsproces gennem datadrevet formidling, UX-design og visuelle virkemidler. Resultatet blev en konceptuel platform, der hjælper brugere med at navigere politiske valg mere intuitivt.",
+    "image": "../static/img/campaign.png"
+  },
+  {
+    "title": "Standardized PIM Module Prototype",
+    "description": "Design og udvikling af et standardiseret Product Information Management (PIM)-modul med fokus på databasearkitektur, backend-struktur og brugergrænseflade. Projektet omfattede visualisering gennem mockups samt udvikling af en funktionel prototype, der demonstrerer, hvordan et generisk PIM-system kan anvendes på tværs af virksomheder med minimal tilpasning.",
+    "image": "../static/img/pim.png"
+  },
+  {
+    "title": "Microservices-Based Booking System for Kolding Trailers",
+    "description": "Udvikling af et containeriseret bookingsystem baseret på microservices til Kolding Trailers A/S. Projektet omfattede kravspecificering med MoSCoW, FURPS og CAP, design af personaer og UML-diagrammer samt implementering af API-baseret bookingfunktionalitet med ekstern nummerpladeverifikation. Løsningen blev distribueret med Docker og demonstrerede en skalerbar og moderne arkitektur til online reservationer.",
+    "image": "../static/img/microservices-booking.png"
+  },
+  {
+    "title": "Agile Enhancement of Note-Sharing Web Service",
+    "description": "Videreudvikling og forbedring af en eksisterende note-delings-webapplikation med fokus på systemdokumentation, nye funktioner og agil udviklingsproces. Projektet omfattede teknisk dokumentation, brugerundersøgelser, test og iterative forbedringer gennem Scrum. Resultatet blev en mere brugervenlig og veldokumenteret løsning med forbedret funktionalitet og udviklingsproces.",
+    "image": "../static/img/agile-note.png"
+  },
+  {
+    "title": "Software Architecture Patterns and Maintainability Analysis",
+    "description": "Litteraturbaseret analyse af hvordan Microservices, CQRS og Hexagonal Arkitektur påvirker softwarevedligeholdelse, læsbarhed og clean code. Projektet sammenlignede styrker og svagheder ved de tre arkitekturmønstre og identificerede deres indflydelse på kompleksitet, fleksibilitet og testbarhed. Resultatet viser, at arkitekturvalg bør baseres på systemets kontekst og krav frem for en universel løsning.",
+    "image": "../static/img/software-architecture.png"
+  }
 ]

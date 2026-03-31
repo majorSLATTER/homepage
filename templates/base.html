@@ -13,6 +13,40 @@
                 document.body.classList.add('dark-mode');
                 document.getElementById('darkmode-slider').checked = true;
             }
+            
+            // Intersection Observer for slide-in animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const animation = entry.target.dataset.animation;
+                        entry.target.style.animation = animation;
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe project cards
+            const projectCards = document.querySelectorAll('.project-card');
+            projectCards.forEach((card, index) => {
+                const slideDirection = index % 2 === 0 ? 'slideInLeft' : 'slideInRight';
+                card.dataset.animation = `${slideDirection} 0.6s ease-out forwards`;
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
+            
+            // Observe about cards
+            const aboutCards = document.querySelectorAll('.about-card');
+            aboutCards.forEach((card, index) => {
+                const slideDirection = index % 2 === 0 ? 'slideInLeft' : 'slideInRight';
+                card.dataset.animation = `${slideDirection} 0.6s ease-out forwards`;
+                card.style.opacity = '0';
+                observer.observe(card);
+            });
         });
     </script>
 </head>
