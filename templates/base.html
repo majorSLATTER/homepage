@@ -52,12 +52,12 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('hello_world') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Sune Skovmand neon logo: stylized purple and black design featuring two mirrored figures with curved forms and glowing neon outline effect" id="logo"></a>
+        <a href="{{ root_path }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt="Sune Skovmand neon logo: stylized purple and black design featuring two mirrored figures with curved forms and glowing neon outline effect" id="logo"></a>
         <nav>
             <ul>
-                <li><a href="{{ url_for('projects') }}">Projekter</a></li>
-                <li><a href="{{ url_for('about') }}">Om Mig</a></li>
-                <li><a href="{{ url_for('contact') }}">Kontakt</a></li>
+                <li><a href="{{ root_path }}projects/">Projekter</a></li>
+                <li><a href="{{ root_path }}about/">Om Mig</a></li>
+                <li><a href="{{ root_path }}contact/">Kontakt</a></li>
             </ul>
             <div class="nav-separator"></div>
             <label for="darkmode-slider" class="switch">
