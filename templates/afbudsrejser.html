@@ -22,6 +22,7 @@
 <script>
     const API_URL = 'https://www.afbudsrejser.dk/services/charter/api_search';
     const PROXY_URL = '/api/charter-search'; // Use proxy for local dev
+    const CORS_PROXY = 'https://api.allorigins.win/raw?url='; // Fallback CORS proxy
     const COUNTRIES = ['ES', 'PT', 'IT', 'GR', 'FR', 'MT'];
     let currentMaxPrice = 8000;
     
@@ -52,32 +53,49 @@
                     fields: ['hotel_name', 'destination_name', 'country_name', 'departure_date', 'return_date', 'price_per_pers', 'url']
                 });
                 
-                // Try local proxy first (for development), fallback to direct API for GitHub Pages
-                const url = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-                    ? `${PROXY_URL}?${params}`
-                    : `${API_URL}?${params}`;
+                // Build URLs in order of preference
+                const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const directUrl = `${API_URL}?${params}`;
+                const urls = isLocalhost 
+                    ? [`${PROXY_URL}?${params}`, directUrl, `${CORS_PROXY}${encodeURIComponent(directUrl)}`]
+                    : [directUrl, `${CORS_PROXY}${encodeURIComponent(directUrl)}`];
                 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: {
-                        'Accept': 'application/json'
+                let data = null;
+                let lastError = null;
+                
+                // Try each URL in sequence
+                for (const url of urls) {
+                    try {
+                        const response = await fetch(url, {
+                            method: 'GET',
+                            mode: 'cors',
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            data = await response.json();
+                            results[country] = data.results || [];
+                            break; // Success, stop trying
+                        }
+                    } catch (error) {
+                        lastError = error;
+                        // Try next URL
+                        continue;
                     }
-                });
+                }
                 
-                if (response.ok) {
-                    const data = await response.json();
-                    results[country] = data.results || [];
-                } else {
+                if (!data) {
                     results[country] = [];
+                    if (lastError) {
+                        corsError = true;
+                        console.error(`Failed to fetch ${country}:`, lastError);
+                    }
                 }
             } catch (error) {
-                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
-                    corsError = true;
-                    console.error(`CORS Error or network issue fetching ${country}:`, error);
-                } else {
-                    console.error(`Error fetching ${country}:`, error);
-                }
+                corsError = true;
+                console.error(`Error fetching ${country}:`, error);
                 results[country] = [];
             }
         }
