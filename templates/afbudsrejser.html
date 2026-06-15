@@ -8,61 +8,183 @@
     <div class="price-filter">
         <label class="filter-label">Max pris per person:</label>
         <div class="filter-buttons">
-            <a href="?max_price=6000" class="filter-btn {% if max_price == 6000 %}active{% endif %}">6000 kr</a>
-            <a href="?max_price=8000" class="filter-btn {% if max_price == 8000 %}active{% endif %}">8000 kr</a>
-            <a href="?max_price=10000" class="filter-btn {% if max_price == 10000 %}active{% endif %}">10000 kr</a>
-            <a href="?max_price=12000" class="filter-btn {% if max_price == 12000 %}active{% endif %}">12000 kr</a>
+            <button class="filter-btn" data-price="6000">6000 kr</button>
+            <button class="filter-btn active" data-price="8000">8000 kr</button>
+            <button class="filter-btn" data-price="10000">10000 kr</button>
+            <button class="filter-btn" data-price="12000">12000 kr</button>
         </div>
     </div>
     
-    {% if results_by_country %}
-        {% for country_code, results in results_by_country.items() %}
-            {% if results %}
-                <div class="country-section">
-                    <h2 class="country-header country-{{ country_code }}">{{ country_code }}</h2>
-                    <div class="results-container">
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Hotel Navn</th>
-                                    <th>Destination</th>
-                                    <th>Afrejsedato</th>
-                                    <th>Hjemkomstdato</th>
-                                    <th>Pris per Person</th>
-                                    <th>Link</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for result in results %}
-                                    <tr>
-                                        <td class="rank">{{ loop.index }}</td>
-                                        <td>{{ result.get('hotel_name', 'N/A') }}</td>
-                                        <td>{{ result.get('destination_name', 'N/A') }}</td>
-                                        <td>{{ result.get('departure_date', 'N/A')[:10] }}</td>
-                                        <td>{{ result.get('return_date', 'N/A')[:10] }}</td>
-                                        <td class="price">{{ result.get('price_per_pers', 'N/A') }} kr</td>
-                                        <td>
-                                            {% if result.get('url') %}
-                                                <a href="{{ result.get('url') }}" target="_blank" class="booking-link">Gå til siden</a>
-                                            {% else %}
-                                                N/A
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <div class="no-results">
-            <p>Ingen resultater fundet. Prøv igen senere.</p>
-        </div>
-    {% endif %}
+    <div id="loading" class="loading">Henter data...</div>
+    <div id="results-wrapper"></div>
 </section>
+
+<script>
+    const API_URL = 'https://www.afbudsrejser.dk/services/charter/api_search';
+    const PROXY_URL = '/api/charter-search'; // Use proxy for local dev
+    const COUNTRIES = ['ES', 'PT', 'IT', 'GR', 'FR', 'MT'];
+    let currentMaxPrice = 8000;
+    
+    async function fetchResults(maxPrice) {
+        const resultsWrapper = document.getElementById('results-wrapper');
+        const loading = document.getElementById('loading');
+        
+        loading.style.display = 'block';
+        resultsWrapper.innerHTML = '';
+        
+        const results = {};
+        let corsError = false;
+        
+        for (const country of COUNTRIES) {
+            try {
+                const params = new URLSearchParams({
+                    country_iso: country,
+                    category: 'SUNBATH',
+                    board_type: 'all_inclusive',
+                    adults: 2,
+                    max_price: maxPrice,
+                    depart_date_min: '2026-07-06T00:00:00Z',
+                    depart_date_max: '2026-07-19T23:59:59Z',
+                    days_min: 5,
+                    days_max: 7,
+                    limit: 25,
+                    sort: 'price_asc',
+                    fields: ['hotel_name', 'destination_name', 'country_name', 'departure_date', 'return_date', 'price_per_pers', 'url']
+                });
+                
+                // Try local proxy first (for development), fallback to direct API for GitHub Pages
+                const url = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                    ? `${PROXY_URL}?${params}`
+                    : `${API_URL}?${params}`;
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    results[country] = data.results || [];
+                } else {
+                    results[country] = [];
+                }
+            } catch (error) {
+                if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    corsError = true;
+                    console.error(`CORS Error or network issue fetching ${country}:`, error);
+                } else {
+                    console.error(`Error fetching ${country}:`, error);
+                }
+                results[country] = [];
+            }
+        }
+        
+        loading.style.display = 'none';
+        
+        if (corsError && Object.values(results).every(arr => arr.length === 0)) {
+            renderCorsError();
+        } else {
+            renderResults(results);
+        }
+    }
+    
+    function renderCorsError() {
+        const resultsWrapper = document.getElementById('results-wrapper');
+        resultsWrapper.innerHTML = `
+            <div class="no-results" style="color: #d32f2f; border: 1px solid #d32f2f; border-radius: 4px; padding: 2rem;">
+                <p><strong>⚠️ Fejl ved data-hentning</strong></p>
+                <p>Der opstod et problem med at hente data fra API'et. Dette kan skyldes:</p>
+                <ul style="text-align: left; max-width: 400px; margin: 1rem auto;">
+                    <li>Nettverksforbindelse</li>
+                    <li>CORS-begrænsninger</li>
+                    <li>API'et er midlertidigt utilgængeligt</li>
+                </ul>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">Prøv at genindlæse siden eller kontakt administratoren.</p>
+            </div>
+        `;
+    }
+    
+    function renderResults(results) {
+        const resultsWrapper = document.getElementById('results-wrapper');
+        let html = '';
+        
+        const hasAnyResults = Object.values(results).some(arr => arr.length > 0);
+        
+        if (!hasAnyResults) {
+            html = '<div class="no-results"><p>Ingen resultater fundet. Prøv igen senere eller med anden prisklasse.</p></div>';
+        } else {
+            for (const country of COUNTRIES) {
+                const countryResults = results[country];
+                if (countryResults && countryResults.length > 0) {
+                    html += renderCountrySection(country, countryResults);
+                }
+            }
+        }
+        
+        resultsWrapper.innerHTML = html;
+    }
+    
+    function renderCountrySection(country, results) {
+        let rows = '';
+        results.forEach((result, index) => {
+            const departDate = new Date(result.departure_date).toLocaleDateString('da-DK');
+            const returnDate = new Date(result.return_date).toLocaleDateString('da-DK');
+            rows += `
+                <tr>
+                    <td class="rank">${index + 1}</td>
+                    <td>${result.hotel_name || 'N/A'}</td>
+                    <td>${result.destination_name || 'N/A'}</td>
+                    <td>${departDate}</td>
+                    <td>${returnDate}</td>
+                    <td class="price">${result.price_per_pers || 'N/A'} kr</td>
+                    <td>
+                        ${result.url ? `<a href="${result.url}" target="_blank" class="booking-link">Gå til siden</a>` : 'N/A'}
+                    </td>
+                </tr>
+            `;
+        });
+        
+        return `
+            <div class="country-section">
+                <h2 class="country-header country-${country}">${country}</h2>
+                <div class="results-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Hotel Navn</th>
+                                <th>Destination</th>
+                                <th>Afrejsedato</th>
+                                <th>Hjemkomstdato</th>
+                                <th>Pris per Person</th>
+                                <th>Link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Setup filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentMaxPrice = parseInt(this.dataset.price);
+            fetchResults(currentMaxPrice);
+        });
+    });
+    
+    // Load initial results
+    fetchResults(currentMaxPrice);
+</script>
 
 <style>
     .afbudsrejser-section {
@@ -82,6 +204,14 @@
         color: #666;
         margin-bottom: 1.5rem;
         font-style: italic;
+    }
+    
+    .loading {
+        text-align: center;
+        padding: 2rem;
+        font-size: 1.1rem;
+        color: #0066cc;
+        font-weight: 500;
     }
     
     .price-filter {
@@ -114,14 +244,14 @@
         padding: 0.65rem 1.25rem;
         background: #ffffff;
         color: #333;
-        text-decoration: none;
-        border-radius: 6px;
         border: 2px solid #ddd;
+        border-radius: 6px;
         cursor: pointer;
         transition: all 0.3s ease;
         font-weight: 500;
         font-size: 0.95rem;
         white-space: nowrap;
+        font-family: inherit;
     }
     
     .filter-btn:hover {
@@ -149,6 +279,7 @@
     body.dark-mode .filter-btn:hover {
         background: #444;
         border-color: #0066cc;
+        color: #66b3ff;
     }
     
     body.dark-mode .price-filter {

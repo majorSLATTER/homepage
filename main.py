@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import json
 import os
 import requests
@@ -27,50 +27,52 @@ def contact():
 
 @app.route('/afbudsrejser/')
 def afbudsrejser():
-    countries = ['ES', 'PT', 'IT', 'GR', 'FR', 'MT']
-    results_by_country = {}
-    max_price = int(request.args.get('max_price', 8000))
-    
+    # Route is only used for local development
+    # In production (GitHub Pages), this page uses client-side JavaScript to fetch API data
+    return render_template('afbudsrejser.html')
+
+@app.route('/api/charter-search')
+def charter_search():
+    """Proxy endpoint for charter API to handle CORS issues"""
     try:
-        url = 'https://www.afbudsrejser.dk/services/charter/api_search'
-        base_params = {
-            'category': 'SUNBATH',
-            'board_type': 'all_inclusive',
-            'adults': 2,
-            'max_price': max_price,
-            'depart_date_min': '2026-07-06T00:00:00Z',
-            'depart_date_max': '2026-07-19T23:59:59Z',
-            'days_min': 5,
-            'days_max': 7,
-            'limit': 25,
-            'sort': 'price_asc',
-            'fields': ['hotel_name', 'destination_name', 'country_name', 'departure_date', 'return_date', 'price_per_pers', 'url']
+        # Get query parameters from client
+        country_iso = request.args.get('country_iso')
+        if not country_iso:
+            return jsonify({'error': 'country_iso parameter required'}), 400
+        
+        # Build the external API URL
+        api_url = 'https://www.afbudsrejser.dk/services/charter/api_search'
+        
+        params = {
+            'country_iso': country_iso,
+            'category': request.args.get('category', 'SUNBATH'),
+            'board_type': request.args.get('board_type', 'all_inclusive'),
+            'adults': request.args.get('adults', 2),
+            'max_price': request.args.get('max_price', 8000),
+            'depart_date_min': request.args.get('depart_date_min'),
+            'depart_date_max': request.args.get('depart_date_max'),
+            'days_min': request.args.get('days_min', 5),
+            'days_max': request.args.get('days_max', 7),
+            'limit': request.args.get('limit', 25),
+            'sort': request.args.get('sort', 'price_asc')
         }
         
-        # Add headers to prevent caching issues
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            'Cache-Control': 'no-cache'
-        }
+        # Add fields parameter (can be multiple)
+        fields = request.args.getlist('fields')
+        if fields:
+            params['fields'] = fields
         
-        for country in countries:
-            try:
-                params = {**base_params, 'country_iso': country}
-                response = requests.get(url, params=params, timeout=10, headers=headers)
-                # Handle both 200 (OK) and 304 (Not Modified) status codes
-                if response.status_code in [200, 304]:
-                    if response.status_code == 200 and response.text:
-                        results_by_country[country] = response.json().get('results', [])
-                    else:
-                        results_by_country[country] = []
-                else:
-                    results_by_country[country] = []
-            except Exception as e:
-                results_by_country[country] = []
+        # Fetch from external API
+        response = requests.get(api_url, params=params, timeout=10)
+        
+        # Return the response as JSON
+        if response.status_code == 200:
+            return jsonify(response.json())
+        else:
+            return jsonify({'results': []}), 200
+            
     except Exception as e:
-        results_by_country = {country: [] for country in countries}
-    
-    return render_template('afbudsrejser.html', results_by_country=results_by_country, max_price=max_price)
+        return jsonify({'error': str(e), 'results': []}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
