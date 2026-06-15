@@ -65,6 +65,7 @@ def build_site():
         ('projects.html', '/projects/', {'projects': projects_data}),
         ('about.html', '/about/', {}),
         ('contact.html', '/contact/', {}),
+        ('afbudsrejser.html', '/afbudsrejser/', {'results_by_country': {}, 'max_price': 8000})
     ]
 
     # Render templates
