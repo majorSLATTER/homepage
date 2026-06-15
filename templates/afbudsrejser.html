@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="afbudsrejser-section">
+    <h1>Charter Rejser - Flere Destinationer</h1>
+    <p class="subtitle">Ordnet efter pris (lavest først) - 2 voksne</p>
+    
+    <div class="price-filter">
+        <label class="filter-label">Max pris per person:</label>
+        <div class="filter-buttons">
+            <a href="?max_price=6000" class="filter-btn {% if max_price == 6000 %}active{% endif %}">6000 kr</a>
+            <a href="?max_price=8000" class="filter-btn {% if max_price == 8000 %}active{% endif %}">8000 kr</a>
+            <a href="?max_price=10000" class="filter-btn {% if max_price == 10000 %}active{% endif %}">10000 kr</a>
+            <a href="?max_price=12000" class="filter-btn {% if max_price == 12000 %}active{% endif %}">12000 kr</a>
+        </div>
+    </div>
+    
+    {% if results_by_country %}
+        {% for country_code, results in results_by_country.items() %}
+            {% if results %}
+                <div class="country-section">
+                    <h2 class="country-header country-{{ country_code }}">{{ country_code }}</h2>
+                    <div class="results-container">
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Hotel Navn</th>
+                                    <th>Destination</th>
+                                    <th>Afrejsedato</th>
+                                    <th>Hjemkomstdato</th>
+                                    <th>Pris per Person</th>
+                                    <th>Link</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in results %}
+                                    <tr>
+                                        <td class="rank">{{ loop.index }}</td>
+                                        <td>{{ result.get('hotel_name', 'N/A') }}</td>
+                                        <td>{{ result.get('destination_name', 'N/A') }}</td>
+                                        <td>{{ result.get('departure_date', 'N/A')[:10] }}</td>
+                                        <td>{{ result.get('return_date', 'N/A')[:10] }}</td>
+                                        <td class="price">{{ result.get('price_per_pers', 'N/A') }} kr</td>
+                                        <td>
+                                            {% if result.get('url') %}
+                                                <a href="{{ result.get('url') }}" target="_blank" class="booking-link">Gå til siden</a>
+                                            {% else %}
+                                                N/A
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="no-results">
+            <p>Ingen resultater fundet. Prøv igen senere.</p>
+        </div>
+    {% endif %}
+</section>
+
+<style>
+    .afbudsrejser-section {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
+    
+    .afbudsrejser-section h1 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+    }
+    
+    .price-filter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .filter-label {
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .filter-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .filter-btn {
+        padding: 0.75rem 1.5rem;
+        background: #f0f0f0;
+        color: #333;
+        text-decoration: none;
+        border-radius: 6px;
+        border: 2px solid #ddd;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+    
+    .filter-btn:hover {
+        background: #e0e0e0;
+        border-color: #0066cc;
+    }
+    
+    .filter-btn.active {
+        background: #0066cc;
+        color: white;
+        border-color: #0066cc;
+    }
+    
+    body.dark-mode .filter-label {
+        color: #ddd;
+    }
+    
+    body.dark-mode .filter-btn {
+        background: #333;
+        color: #ddd;
+        border-color: #444;
+    }
+    
+    body.dark-mode .filter-btn:hover {
+        background: #444;
+        border-color: #0066cc;
+    }
+    
+    .country-section {
+        margin-bottom: 3rem;
+    }
+    
+    .country-header {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 3px solid #0066cc;
+        font-weight: 700;
+    }
+    
+    .country-ES { color: #c60b1e; }
+    .country-PT { color: #003478; }
+    .country-IT { color: #009246; }
+    .country-GR { color: #0066cc; }
+    .country-FR { color: #002395; }
+    .country-MT { color: #dc143c; }
+    
+    .results-container {
+        overflow-x: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+    }
+    
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.95rem;
+    }
+    
+    .results-table thead {
+        background: #f5f5f5;
+        border-bottom: 2px solid #ddd;
+    }
+    
+    .results-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #333;
+    }
+    
+    .results-table td {
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .results-table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+    
+    .rank {
+        font-weight: 600;
+        text-align: center;
+        color: #0066cc;
+    }
+    
+    .price {
+        font-weight: 600;
+        color: #27ae60;
+        font-size: 1.05rem;
+    }
+    
+    .booking-link {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: #0066cc;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: background 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .booking-link:hover {
+        background: #0052a3;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 3rem;
+        color: #666;
+        font-size: 1.1rem;
+    }
+    
+    body.dark-mode .results-container {
+        background: #2a2a2a;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    body.dark-mode .results-table thead {
+        background: #1a1a1a;
+        border-bottom-color: #444;
+    }
+    
+    body.dark-mode .results-table th {
+        color: #ddd;
+    }
+    
+    body.dark-mode .results-table td {
+        color: #ddd;
+        border-bottom-color: #444;
+    }
+    
+    body.dark-mode .results-table tbody tr:hover {
+        background-color: #333;
+    }
+    
+    @media (max-width: 768px) {
+        .price-filter {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .filter-buttons {
+            width: 100%;
+        }
+        
+        .filter-btn {
+            flex: 1;
+            min-width: 100px;
+        }
+        .afbudsrejser-section h1 {
+            font-size: 1.8rem;
+        }
+        
+        .country-header {
+            font-size: 1.4rem;
+        }
+        
+        .results-table {
+            font-size: 0.85rem;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 0.75rem 0.5rem;
+        }
+        
+        .booking-link {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+    }
+</style>
+{% endblock %}
