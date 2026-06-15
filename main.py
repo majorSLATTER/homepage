@@ -47,12 +47,22 @@ def afbudsrejser():
             'fields': ['hotel_name', 'destination_name', 'country_name', 'departure_date', 'return_date', 'price_per_pers', 'url']
         }
         
+        # Add headers to prevent caching issues
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Cache-Control': 'no-cache'
+        }
+        
         for country in countries:
             try:
                 params = {**base_params, 'country_iso': country}
-                response = requests.get(url, params=params, timeout=10)
-                if response.status_code == 200:
-                    results_by_country[country] = response.json().get('results', [])
+                response = requests.get(url, params=params, timeout=10, headers=headers)
+                # Handle both 200 (OK) and 304 (Not Modified) status codes
+                if response.status_code in [200, 304]:
+                    if response.status_code == 200 and response.text:
+                        results_by_country[country] = response.json().get('results', [])
+                    else:
+                        results_by_country[country] = []
                 else:
                     results_by_country[country] = []
             except Exception as e:
